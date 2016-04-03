@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/xampp/htdocs/db2016/search_books.php</file>
+            <file>file:/D:/xampp/htdocs/db2016/search_writers.php</file>
+            <file>file:/D:/xampp/htdocs/db2016/update_book_chapters.php</file>
+            <file>file:/D:/xampp/htdocs/db2016/test.php</file>
+            <file>file:/D:/xampp/htdocs/db2016/gb/mapper/WriterMapper.php</file>
+            <file>file:/D:/xampp/htdocs/db2016/gb/controller/SearchWritersController.php</file>
+            <file>file:/D:/xampp/htdocs/db2016/configuration.php</file>
+            <file>file:/D:/xampp/htdocs/db2016/gb/base/Exceptions.php</file>
+            <file>file:/D:/xampp/htdocs/db2016/add_book_chapters.php</file>
+            <file>file:/D:/xampp/htdocs/db2016/gb/connection/ConnectionManager.php</file>
+            <file>file:/D:/xampp/htdocs/db2016/list_book_chapters.php</file>
+            <file>file:/D:/xampp/htdocs/db2016/style.css</file>
+            <file>file:/D:/xampp/htdocs/db2016/gb/controller/BookController.php</file>
+            <file>file:/D:/xampp/htdocs/db2016/gb/mapper/CountryMapper.php</file>
+        </group>
+    </open-files>
+</project-private>

@@ -1,0 +1,43 @@
+/**
+ * Dit is een beschrijving van de lay-out van de webpagina.
+ */
+div.main, div.navigation {
+   border: 1px solid #000;
+}
+
+div.navigation {
+   background: #FFFF83;
+   color: #000;
+   float: left;
+   width: 33%;
+   margin: 0;
+}
+
+div.main {
+   background: #fff;
+   color: #000;
+   float: left;
+   width: 64%;
+   margin-bottom: 0;
+   border-left: 1px solid #000;
+}
+
+h2.contentTitle, h2.indexTitle {
+   color: #fff;
+   border: none;
+   width: 100%;
+   font-weight: bold;
+   font-size: medium;
+   text-align: center;
+   margin-top: 0;
+   padding: 0.1em;
+   border: none;
+}
+
+h2.contentTitle {
+   background: #6A76BA;
+}
+
+h2.indexTitle {
+   background: #2EBAB8;
+}
