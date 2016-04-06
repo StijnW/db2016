@@ -18,7 +18,6 @@ class WriterMapper extends Mapper {
         
         $writerCollection = array();
         foreach($raw as $row) {
-            print_r ($raw );
             array_push($writerCollection, $this->doCreateObject($row));
         }
         
@@ -63,35 +62,38 @@ class WriterMapper extends Mapper {
     
     function getWritersByName ($name) {
         $con = $this->getConnectionManager();
-        $selectStmt = "SELECT a.*, b.* from person a, writer b where a.uri = b.writer_uri and a.full_name like " ."\"" . $name . "%" . "\"";        
-        $writers = $con->executeSelectStatement($selectStmt, array());
-        print "Search by Name";
-        return $this->getCollection($writers);
-    }
-    
-    function getWritersByNameAndDoB ($name, $dob) {
-        $con = $this->getConnectionManager();
-        $selectStmt = "SELECT a.*, b.* from person a, writer b where a.uri = b.writer_uri and a.Birth_date like " ."\"" . $dob . "%" . "\" and a.full_name like " ."\"" . $name . "%" . "\"";     
-        $writers = $con->executeSelectStatement($selectStmt, array());
-        print "Search by Name + Dob";
-        return $this->getCollection($writers);
-    }
-    
-    function getWritersByNameAndDoBAndCountry ($name, $dob, $givenCountry) {
-        $con = $this->getConnectionManager();
-        $selectStmt = "SELECT a.*, b.* from person a, writer b, country c where c.iso_code = '$givenCountry'
-        and a.uri = b.writer_uri and a.Birth_date like " ."\"" . $dob . "%" . "\" and a.full_name like " ."\"" . $name . "%" . "\"";
-        $writers = $con->executeSelectStatement($selectStmt, array());
-        print "Search by Name + dob + country! Nog niet ok! geeft ook resultaat als er een fout land is aangeduid?!";
-        return $this->getCollection($writers);
-    }
-    
-    function getAllWriters () {
-        $con = $this->getConnectionManager();
-        $selectStmt = "SELECT a.*, b.* from person a, writer b where a.uri = b.writer_uri";        
+        $selectStmt = "SELECT a.*, b.* from person a, writer b where a.uri = 
+		b.writer_uri and a.full_name like " ."\"" . $name . "%" . "\"";        
         $writers = $con->executeSelectStatement($selectStmt, array()); 
+        #print $selectStmt;
         return $this->getCollection($writers);
     }
-}
+    
+	function getWritersByNameAndDoB ($name, $dob) {
+		$con = $this->getConnectionManager();
+		$selectStmt = "SELECT a.*, b.* from person a, writer b where a.uri = 
+		b.writer_uri and a.full_name like " ."\"" . $name . "%" . "\" 
+		and a.birth_date like " ."\"" . $dob . "%" . "\"";
+		$writers = $con->executeSelectStatement($selectStmt, array()); 
+		#print $selectStmt;
+        return $this->getCollection($writers);
+	}
+	
+	function getWritersByNameAndDoBAndCountry ($name, $dob, $country) {
+		$con = $this->getConnectionManager();
+		$selectStmt = "SELECT a.*, b.* from person a, writer b, country c, has_citizenship d 
+		where a.uri = b.writer_uri 
+		and a.full_name like " ."\"" . $name . "%" . "\" 
+		and a.birth_date like " ."\"" . $dob . "%" . "\"
+		and c.iso_code = d.country_iso_code 
+		and d.person_uri = a.uri 
+		and c.name like " ."\"" . $country . "%" . "\"";
+		$writers = $con->executeSelectStatement($selectStmt, array()); 
+		#print $selectStmt;
+        return $this->getCollection($writers);
+	}
+
+}	
+
 
 ?>
