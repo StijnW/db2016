@@ -18,7 +18,7 @@ class BookMapper extends Mapper {
         
         $bookCollection = array();
         foreach($raw as $row) {
-            #print_r($row);
+            print_r($row);
             array_push($bookCollection, $this->doCreateObject($row));
         }
         
@@ -60,19 +60,16 @@ class BookMapper extends Mapper {
     function getBookByGenre($genre){
         $con = $this->getConnectionManager();
         $selectStmt = "SELECT b.name,  COUNT(*), b.description
-							 FROM award a, book b, wins_award c, has_genre d, genre e
-							 where c.book_uri = b.uri
+		    			 FROM award a, book b, wins_award c, has_genre d, genre e
+						 WHERE c.book_uri = b.uri
 							 and c.award_uri = a.uri
 							 and b.uri = d.book_uri
 							 and d.genre_uri = e.uri
 							 and e.uri = '$genre'
-                             GROUP BY b.name";
+                        GROUP BY b.name";
 		
 		//Query werkte perfect in localhost...
-		
-		
-        print "Werkt nog niet deftig!! print statement uitzetten op line 21!";
-		print $selectStmt;
+
         $books = $con->executeSelectStatement($selectStmt, array()); 
         return $this->getCollection($books);
     }
