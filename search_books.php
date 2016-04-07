@@ -48,15 +48,34 @@ $allGenres = $genreMapper->findAll();
 </table>
 </form>
 
-
-<table style="width: 100%">
+<?php
+	$books = $bookController->getSearchResult();
+	print count($books) . " books found";
+	if (count($books) > 0)
+	{?>	
+		<table style="width: 100%">
     <tr>
         <td>Book name</td>        
         <td>Awards</td>
         <td>Description</td>
-    </tr>    
+    </tr>   
+<?php
+		foreach($books as $book){
+			?>
+			<tr>
+			<td><?php echo $book->getBookName(); ?></td>
+			<td><?php echo $book->getAwards(); ?></td>
+			<td><?php echo $book->getDescription(); ?></td>
+			</tr>
+<?php
+		}
+?>
 </table>
-
+<?php
+	}
+?>
+	
+	
 <?php
 	require("template/bottom.tpl.php");
 ?>
