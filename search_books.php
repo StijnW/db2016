@@ -64,7 +64,7 @@ $allGenres = $genreMapper->findAll();
 			?>
 			<tr>
 			<td><?php echo $book->getBookName(); ?></td>
-			<td><?php echo $book->getAwards(); ?></td>
+			<td><?php echo $book->getNumberAwards(); ?></td>
 			<td><?php echo $book->getDescription(); ?></td>
 			</tr>
 <?php

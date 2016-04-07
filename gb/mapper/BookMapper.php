@@ -18,7 +18,7 @@ class BookMapper extends Mapper {
         
         $bookCollection = array();
         foreach($raw as $row) {
-            print_r($row);
+            #print_r($row);
             array_push($bookCollection, $this->doCreateObject($row));
         }
         
@@ -31,7 +31,8 @@ class BookMapper extends Mapper {
         if (count($array) > 0) {
             $obj = new \gb\domain\Book( $array['name'] );
             $obj->setBookName($array["name"]);
-            $obj->setDescription($array['description']);            
+            $obj->setDescription($array['description']);
+            $obj->setNumberAwards($array["COUNT(*)"]);
         } 
         
         return $obj;

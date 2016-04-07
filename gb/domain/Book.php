@@ -10,6 +10,7 @@ class Book extends DomainObject {
     private $description;
     private $originalLanguage;
     private $firstPublicationDate;
+    private $numberAwards;
    
     function __construct( $id=null ) {
         //$this->name = $name;
@@ -55,6 +56,13 @@ class Book extends DomainObject {
         return $this->firstPublicationDate;
     }
 
+    function setNumberAwards( $number_awards){
+        $this->numberAwards = $number_awards;
+    }
+
+    function getNumberAwards(){
+        return $this->numberAwards;
+    }
 }
 
 ?>
