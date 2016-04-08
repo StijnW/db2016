@@ -33,7 +33,6 @@ class BookMapper extends Mapper {
             $obj->setBookName($array['name']);
             $obj->setDescription($array['description']);
             $obj->setNumberAwards($array['COUNT(*)']);
-			//$obj->setNumberOfChapters($array['COUNT(*)']);
         } 
         
         return $obj;
@@ -75,6 +74,7 @@ class BookMapper extends Mapper {
         $books = $con->executeSelectStatement($selectStmt, array()); 
         return $this->getCollection($books);
     }
+
 	
 //	function getBookAndNumberOfChaptersByGenre($genre){
 //		$con = $this->getConnectionManager();

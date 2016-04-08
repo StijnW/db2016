@@ -29,13 +29,14 @@ class ChapterMapper extends Mapper {
         $obj = null;        
         if (count($array) > 0) {
             $obj = new \gb\domain\Chapter( $array['book_uri']);
-            
             $obj->setUri($array['book_uri']);
-            $obj->setChapterNumber($array["chapter_number"]);
+			if(array_key_exists('chapter_number', $array)){
+				$obj->setChapterNumber($array["chapter_number"]);}
             $obj->setText($array['text']);
-            $obj->setNumberOfChapters($array['COUNT(*)']);
-            $obj->setBookName($array['name']);
-            
+			if(array_key_exists('COUNT(*)', $array)){
+				$obj->setNumberOfChapters($array['COUNT(*)']);}
+			if(array_key_exists('name', $array)){
+				$obj->setBookName($array['name']);}
         } 
         
         return $obj;
@@ -73,8 +74,24 @@ class ChapterMapper extends Mapper {
         $books = $con->executeSelectStatement($selectStmt, array()); 
         return $this->getCollection($books);
     }
+	
+	function getAllChapters($book_uri){
+		$con = $this->getConnectionManager();
+        $selectStmt = "SELECT *
+						FROM chapter c
+						WHERE c.book_uri = '$book_uri'";
+        $chapters = $con->executeSelectStatement($selectStmt, array()); 
+        return $this->getCollection($chapters);
+	}
     
+	function updateChapterText($new_text, $book_uri, $chapter_number){
+		$con = $this->getConnectionManager();
+		$setStmt = "UPDATE chapter
+					SET text = $new_text
+					WHERE book_uri = '$book_uri' and chapter_number = '$chapter_number' ";
+		$chapters = $con->executeSelectStatement($selectStmt, array()); 
+	}
+	
 }
-
 
 ?>
