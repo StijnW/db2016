@@ -1,15 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: victo
- * Date: 7/04/2016
- * Time: 19:44
- */
-
 namespace gb\controller;
 
 require_once("gb/controller/PageController.php");
-require_once("gb/mapper/WriterMapper.php");
+require_once("gb/mapper/SpouseMapper.php");
 
 class getSpouseController extends pageController{
     private $selectedSpouses;
@@ -20,7 +13,7 @@ class getSpouseController extends pageController{
     }
     
     function searchSpouses(){
-        $mapper = new \gb\mapper\WriterMapper();
+        $mapper = new \gb\mapper\SpouseMapper();
         return $mapper->getWritersWithWritingSpouse();
     }
 

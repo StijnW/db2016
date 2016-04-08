@@ -35,9 +35,6 @@ class WriterMapper extends Mapper {
             $obj->setDescription($array['description']);
             $obj->setDateOfBirth($array['birth_date']);
             $obj->setDateofDeath($array['death_date']);
-            $obj->setSpouse($array['full_name_person']);
-            $obj->setActiveFrom($array['active_from_year']);
-            $obj->setActiveTo($array['active_to_year']);
         } 
         
         return $obj;
@@ -102,20 +99,6 @@ class WriterMapper extends Mapper {
         $writers = $con->executeSelectStatement($selectStmt, array());
         return $this->getCollection($writers);
     }
-
-    function getWritersWithWritingSpouse(){
-        $con = $this->getConnectionManager();
-        $selectStmt = "Select p1.full_name, p2.full_name as full_name_person, w1.active_from_year, w2.active_to_year
-                        FROM person p1, person p2, writer w1, writer w2, is_spouse_of i
-                        WHERE p1.uri = w1.writer_uri
-                            and p2.uri = w2.writer_uri
-                            and i.writer_uri = w1.writer_uri
-                            and i.person_uri = w2.writer_uri ";
-
-        $spouse = $con->executeSelectStatement($selectStmt, array());
-        return $this->getCollection($spouse);
-    }
-
 }	
 
 

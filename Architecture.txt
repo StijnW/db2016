@@ -1,0 +1,11 @@
+\search_books -> Here the layout of the page is defined.
+\gb\controller\BookController -> Here the actual sql searching is done.
+								 If search is presses this php class activates the BookMapper.
+\gb\domain\Book -> Here the book object is made and filled in.
+\gb\Mapper\BookMapper -> Here we define the query.
+						 And here we make and fill in the Book object.
+						 
+\list_spouses -> Here the layout of the page is defined.
+\gb\controller\getSpouseController -> Here the searching is done and SpouseMapper gets called.
+\gb\Mapper\SpouseMapper -> Here we define the query.
+							And here we fil in the Spouse object.
