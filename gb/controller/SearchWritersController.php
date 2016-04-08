@@ -16,9 +16,19 @@ class SearchWritersController extends PageController {
                 {            
                 // search by full name                
                 $this->writers = $this->searchWriterByName($_POST["full_name"]);
-            } else if ((strlen($_POST["full_name"]) > 0) &&
+            } else if ((strlen($_POST["full_name"]) == 0) &&
                         (strlen($_POST["date_of_birth"]) > 0) &&
                         (strlen($_POST["country"])== 0)) {
+                // search by date_of_birth
+                $this->writers = $this->searchWriterByDoB($_POST["date_of_birth"]);
+             } else if ((strlen($_POST["full_name"]) == 0) &&
+                        (strlen($_POST["date_of_birth"]) == 0) &&
+                        (strlen($_POST["country"]) > 0)) {
+                // search by country
+                $this->writers = $this->searchWriterByCountry($_POST["country"]);
+            }else if ((strlen($_POST["full_name"]) > 0) &&
+                        (strlen($_POST["date_of_birth"]) > 0) &&
+                        (strlen($_POST["country"]) == 0)) {
                 // search by full name + date_of_birth
                 $this->writers = $this->searchWriterByNameAndDoB($_POST["full_name"], $_POST["date_of_birth"]);
             } else if ((strlen($_POST["full_name"]) > 0) &&
@@ -39,6 +49,16 @@ class SearchWritersController extends PageController {
     function searchWriterByName($name) {
         $mapper = new \gb\mapper\WriterMapper();
         return $mapper->getWritersByName($name);
+    }
+    
+    function searchWriterByDob($dob) {
+        $mapper = new \gb\mapper\WriterMapper();
+        return $mapper->getWritersByDob($dob);
+    }
+    
+    function searchWriterByCountry($country) {
+        $mapper = new \gb\mapper\WriterMapper();
+        return $mapper->getWritersByCountry($country);
     }
     
     function searchWriterByNameAndDoB($name, $dob) {

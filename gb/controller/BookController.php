@@ -43,10 +43,6 @@ class BookController extends PageController {
         $mapper = new \gb\mapper\BookMapper();
         return $mapper->getBookByGenre($genre);
     }
-
-    function getSearchResult() {
-        return $this->selectedBookUri;
-    }
 }
 
 ?>
