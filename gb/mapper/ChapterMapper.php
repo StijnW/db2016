@@ -87,11 +87,15 @@ class ChapterMapper extends Mapper {
 	function updateChapterText($new_text, $book_uri, $chapter_number){
 		$con = $this->getConnectionManager();
 		$setStmt = "UPDATE chapter
-					SET text = $new_text
+					SET text = '$new_text'
 					WHERE book_uri = '$book_uri' and chapter_number = '$chapter_number' ";
-		$chapters = $con->executeSelectStatement($selectStmt, array()); 
+		$chapters = $con->executeUpdateStatement($setStmt, array()); 
 	}
 	
+//	function executeUpdateStatement ($updateString, $paras) {
+//        $stmt = $this->prepareSQLStatement ($updateString);
+//        $stmt->execute($paras);
+//        return $stmt->rowCount();
+	
 }
-
 ?>

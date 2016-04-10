@@ -1,19 +1,19 @@
 <?php
 	
-require_once("gb/controller/BookController.php");
+require("gb/controller/BookController.php");
 require_once("gb/mapper/ChapterMapper.php");
+
+//$chapterController = new gb\controller\ChapterController();
+//$chapterController->process();
 
 $bookController = new gb\controller\BookController();
 $bookController->process();
-//$chapterController = new gb\controller\ChapterController();
-//$chapterController->process();
 
 $title = "book_uri =" . $bookController->getSelectedBookUri();
 require("template/top.tpl.php");
 
 $chapterMapper = new gb\mapper\ChapterMapper();
 $allChapters = $chapterMapper->getAllChapters($bookController->getSelectedBookUri());
-//print_r($allChapters);
 
 ?>    
 <form method="post">
