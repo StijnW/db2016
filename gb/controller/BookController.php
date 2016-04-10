@@ -10,7 +10,13 @@ class BookController extends PageController {
     private $selectedChapterNumber;
     private $chapterText;
     
+    //function __construct($title){
+    //    $array = explode('=',$title);
+    //    $this->selectedBookUri = $array[1];
+    //}
+    
     function process() {
+        
         if (isset($_POST["search"])) {
             
             if ((strlen($_POST["genre"])) > 0){
@@ -18,7 +24,14 @@ class BookController extends PageController {
             }
         }
         
-        if (isset($_POST["chapter"])){
+        if (isset($_POST["update"])) {
+            $array = explode('=',$_SERVER['REQUEST_URI']);
+            $this->selectedBookUri = $array[1];
+            $this->selectedChapterNumber = $_POST["chapter"];
+            $this->updateBookChapter($_POST["new_text"],$this->getSelectedBookUri(),$this->selectedChapterNumber);
+        }
+        
+        else if (isset($_POST["chapter"])){
                 $array = explode(',',($_POST["chapter"]));
                 print_r($array);
                 $chapterText = $array[0];
@@ -27,11 +40,6 @@ class BookController extends PageController {
                 $this->selectedChapterNumber = $selectedChapterNumber;
                 $this->selectedBookUri = $selectedBookUri;
                 $this->chapterText = $chapterText;
-            
-        }
-        
-        if (isset($_POST["update"])) {
-            $this->updateBookChapter($_POST["new_text"]);
         }
         
         if (isset($_POST["add_chapter"])) {
@@ -47,7 +55,6 @@ class BookController extends PageController {
     function updateBookChapter($new_text) {
         $mapper = new \gb\mapper\ChapterMapper();
         $mapper->updateChapterText($new_text, $this->selectedBookUri, $this->selectedChapterNumber);
-        print "Please provide some piece of code to update the book chapter here!";
     }
     function addBookChapter() {
         print "Please provide some piece of code to add a new chapter for the selected books here!";
