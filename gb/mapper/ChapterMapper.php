@@ -42,7 +42,7 @@ class ChapterMapper extends Mapper {
         return $obj;
     }
 
-    protected function doInsert( \gb\domain\DomainObject $object ) {
+    protected function doInsert(\gb\domain\DomainObject $object) {
         /*$values = array( $object->getName() ); 
         $this->insertStmt->execute( $values );
         $id = self::$PDO->lastInsertId();
@@ -91,6 +91,18 @@ class ChapterMapper extends Mapper {
 					WHERE book_uri = '$book_uri' and chapter_number = '$chapter_number' ";
 		$chapters = $con->executeUpdateStatement($setStmt, array()); 
 	}
+	
+	function insertChapter($new_text, $book_uri, $chapter_number ) {
+        /*$values = array( $object->getName() ); 
+        $this->insertStmt->execute( $values );
+        $id = self::$PDO->lastInsertId();
+        $object->setId( $id );*/
+		
+		$con = $this->getConnectionManager();
+		$insertStmt = "INSERT INTO chapter
+						VALUES ('$book_uri', '$chapter_number', '$new_text')";
+		$con->executeUpdateStatement($insertStmt, array()); 
+    }
 	
 //	function executeUpdateStatement ($updateString, $paras) {
 //        $stmt = $this->prepareSQLStatement ($updateString);
