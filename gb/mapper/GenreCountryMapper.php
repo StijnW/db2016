@@ -1,17 +1,3 @@
-// Query to excecute : "SELECT g.name, c.name, COUNT(*)
-// FROM country c, award a, genre g, book b, wins_award wa, writer w, person p, has_citizenship hc, writes ws
-// WHERE wa.book_uri = b.uri
-// and wa.genre_uri = g.uri
-// and wa.award_uri = a.uri
-// and w.writer_uri = p.uri
-// and p.uri = hc.person_uri
-// and c.iso_code = hc.country_iso_code
-// and w.writer_uri = ws.writer_uri
-// and ws.book_uri = b.uri
-// and b.first_publication_date < '$End_date'
-// and b.first_publication_date > '$Start_date'
-// GROUP BY  g.name, c.iso_code";
-
 <?php
 namespace gb\mapper;
 
@@ -23,7 +9,7 @@ class GenreCountryMapper extends Mapper {
 
     function __construct() {
         parent::__construct();
-        $this->selectStmt = "SELECT g.name, c.name, COUNT(*)
+        $this->selectStmt = "SELECT g.name as genre_name, c.name as country, COUNT(*) as number_awards
 								 FROM country c, award a, genre g, book b, wins_award wa, writer w, person p, has_citizenship hc, writes ws
 								 WHERE wa.book_uri = b.uri
 								 and wa.genre_uri = g.uri
@@ -32,11 +18,8 @@ class GenreCountryMapper extends Mapper {
 								 and p.uri = hc.person_uri
 								 and c.iso_code = hc.country_iso_code
 								 and w.writer_uri = ws.writer_uri
-								 and ws.book_uri = b.uri
-								 and b.first_publication_date < ?
-								 and b.first_publication_date > ?
-								 GROUP BY  g.name, c.iso_code";
-        $this->selectAllStmt = "SELECT g.name, c.name, COUNT(*)
+								 and ws.book_uri = b.uri";
+        $this->selectAllStmt = "SELECT g.name as genre_name, c.name as country, COUNT(*) as number_awards
 								 FROM country c, award a, genre g, book b, wins_award wa, writer w, person p, has_citizenship hc, writes ws
 								 WHERE wa.book_uri = b.uri
 								 and wa.genre_uri = g.uri
@@ -45,7 +28,7 @@ class GenreCountryMapper extends Mapper {
 								 and p.uri = hc.person_uri
 								 and c.iso_code = hc.country_iso_code
 								 and w.writer_uri = ws.writer_uri
-								 and ws.book_uri = b.uri";        
+								 and ws.book_uri = b.uri";       
     } 
     
     function getCollection( array $raw ) {
@@ -62,11 +45,10 @@ class GenreCountryMapper extends Mapper {
         
         $obj = null;        
         if (count($array) > 0) {
-            $obj = new \gb\domain\GenreCountry($array['uri'] );
+            $obj = new \gb\domain\GenreCountry($array['genre_name']);
 
-            $obj->setUri($array['uri']);
-            $obj->setGenre($array['genre']);
-            $obj->setCountry($array['country']);
+            $obj->setGenreName($array['genre_name']);
+            $obj->setCountryName($array['country']);
             $obj->setNumberAwards($array['number_awards']);
         } 
         
@@ -95,7 +77,7 @@ class GenreCountryMapper extends Mapper {
     
     function getGenreCountryAwards ($Start_date, $End_date) {
         $con = $this->getConnectionManager();
-        $selectStmt = "SELECT g.name, c.name, COUNT(*)
+        $selectStmt = "SELECT g.name as genre_name, c.name as country, COUNT(*) as number_awards
 								 FROM country c, award a, genre g, book b, wins_award wa, writer w, person p, has_citizenship hc, writes ws
 								 WHERE wa.book_uri = b.uri
 								 and wa.genre_uri = g.uri

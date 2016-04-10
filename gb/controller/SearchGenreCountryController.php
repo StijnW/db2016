@@ -8,12 +8,13 @@ class SearchGenreCountryController extends PageController {
     private $genreCountrys;
     
     function process() {
-        if (isset($_POST["search_genre_countrys"])) {             
-            $this->genreCountrys = $this->searchGenreCountry($_POST["start_date"], $_POST["end_date"]);
+        if (isset($_POST["search_genre_country"])) {             
+            $this->genreCountrys = $this->searchGenreCountry($_POST["from_time"], $_POST["to_time"]);
             } 
 	}
 	
 	function searchGenreCountry($start_date, $end_date) {
+		"SearchGenreCountry";
         $mapper = new \gb\mapper\GenreCountryMapper();
         return $mapper->getGenreCountryAwards ($start_date, $end_date);
     }

@@ -1,9 +1,20 @@
+
 <?php
 	
-$title = "Books that win awards";
+$title = "Books win awards";
 
 require("template/top.tpl.php");
-?>    
+require_once("gb/controller/SearchGenreCountryController.php");
+require_once("gb/domain/GenreCountry.php");
+require_once("gb/mapper/GenreCountryMapper.php");
+
+$searchGenreCountryController = new gb\controller\SearchGenreCountryController();
+$searchGenreCountryController->process();
+
+$GenreCountryMapper = new gb\mapper\GenreCountryMapper();
+$allGenreCountries = $GenreCountryMapper->findAll();
+ 
+?>      
 <form method="post">
 <table style="width: 100%">
 
@@ -19,7 +30,7 @@ require("template/top.tpl.php");
         </tr>
         <tr>
             <td >&nbsp;</td>            
-            <td><input type ="submit" name="search" value="Search" ></td>
+            <td><input type ="submit" name="search_genre_country" value="Search" ></td>
             <td >&nbsp;</td>
             <td >&nbsp;</td>
     
@@ -29,6 +40,11 @@ require("template/top.tpl.php");
 </table>
 </form>
 
+<?php
+    $genreCountrys = $searchGenreCountryController->getSearchResult();
+    print count($genreCountrys) . " combinations found";
+    if (count($genreCountrys) > 0) {
+?>
 
 <table style="width: 100%">
     <tr>
@@ -36,7 +52,22 @@ require("template/top.tpl.php");
         <td>Genre name</td> 
         <td>Total number of books</td>
     </tr>    
+	<?php
+        foreach($genreCountrys as $genreCountry) {
+ ?>
+       <tr>
+		<td><?php echo $genreCountry->getGenreName(); ?></td>
+                <td><?php echo $genreCountry->getCountryName(); ?></td>
+                <td><?php echo $genreCountry->getNumberAwards(); ?></td>
+	</tr>     
+<?php        
+        }
+?>
 </table>
+<?php
+    }
+?>
+
 
 <?php
 	require("template/bottom.tpl.php");

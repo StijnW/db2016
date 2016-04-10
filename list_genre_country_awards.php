@@ -38,6 +38,7 @@ $allGenreCountries = $GenreCountryMapper->findAll();
 
 <?php
     $genreCountrys = $searchGenreCountryController->getSearchResult();
+	print "search results";
     print count($genreCountrys) . " combinations found";
     if (count($genreCountrys) > 0) {
 ?>

@@ -12,7 +12,7 @@ $searchWriterController->process();
 
 $countryMapper = new gb\mapper\CountryMapper();
 $allCountries = $countryMapper->findAll();
- 
+
 ?>    
 <form method="post">
 <table style="width: 100%">
