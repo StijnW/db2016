@@ -29,7 +29,6 @@ $allGenres = $genreMapper->findAll();
 					<?php
                     foreach($allGenres as $genre) {
                         echo "<option value=\"", $genre->getUri(), "\">", $genre->getGenreName(), "</option>" ;
-						//echo '<option value="'.$genre->getUri().'">'.$genre->getGenreName().'</option>';
                     }
                     
                     ?>
@@ -49,7 +48,7 @@ $allGenres = $genreMapper->findAll();
 </form>
 
 <?php
-	$books = $bookController->getSearchResult();
+	$books = $bookController->getSelectedBookUri();
 	print count($books) . " books found";
 	if (count($books) > 0)
 	{?>	

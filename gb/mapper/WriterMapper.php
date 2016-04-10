@@ -65,17 +65,30 @@ class WriterMapper extends Mapper {
         $selectStmt = "SELECT a.*, b.* from person a, writer b where a.uri = 
 		b.writer_uri and a.full_name like '$name%'";        
         $writers = $con->executeSelectStatement($selectStmt, array()); 
-        print $selectStmt;
         return $this->getCollection($writers);
     }
     
+	function getWritersByDob ($dob) {
+        $con = $this->getConnectionManager();
+        $selectStmt = "SELECT a.*, b.* from person a, writer b WHERE a.uri = b.writer_uri and a.birth_date like '$dob%'";
+        $writers = $con->executeSelectStatement($selectStmt, array()); 
+        return $this->getCollection($writers);
+    }
+	
+	function getWritersByCountry ($country) {
+        $con = $this->getConnectionManager();
+        $selectStmt = "SELECT a.*, b.* from person a, writer b, has_citizenship c WHERE
+		a.uri = b.writer_uri and c.person_uri = a.uri and c.country_iso_code = '$country'";
+        $writers = $con->executeSelectStatement($selectStmt, array()); 
+        return $this->getCollection($writers);
+    }
+	
 	function getWritersByNameAndDoB ($name, $dob) {
 		$con = $this->getConnectionManager();
 		$selectStmt = "SELECT a.*, b.* from person a, writer b where a.uri = 
 		b.writer_uri and a.full_name like '$name%' 
 		and a.birth_date like '$dob%'";
 		$writers = $con->executeSelectStatement($selectStmt, array()); 
-		print $selectStmt;
         return $this->getCollection($writers);
 	}
 	
@@ -89,7 +102,6 @@ class WriterMapper extends Mapper {
 		and c.country_iso_code = '$country' "
 		;
 		$writers = $con->executeSelectStatement($selectStmt, array()); 
-		print $selectStmt;
         return $this->getCollection($writers);
 	}
 	

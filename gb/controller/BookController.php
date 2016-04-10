@@ -3,9 +3,12 @@ namespace gb\controller;
 
 require_once("gb/controller/PageController.php");
 require_once("gb/mapper/BookMapper.php");
+require_once("gb/mapper/ChapterMapper.php");
 
 class BookController extends PageController {
     private $selectedBookUri;
+    private $selectedChapterNumber;
+    private $chapterText;
     
     function process() {
         if (isset($_POST["search"])) {
@@ -15,8 +18,20 @@ class BookController extends PageController {
             }
         }
         
+        if (isset($_POST["chapter"])){
+                $array = explode(',',($_POST["chapter"]));
+                print_r($array);
+                $chapterText = $array[0];
+                $selectedChapterNumber = $array[1];
+                $selectedBookUri = $array[2];
+                $this->selectedChapterNumber = $selectedChapterNumber;
+                $this->selectedBookUri = $selectedBookUri;
+                $this->chapterText = $chapterText;
+            
+        }
+        
         if (isset($_POST["update"])) {
-            $this->updateBookChapter();
+            $this->updateBookChapter($_POST["new_text"]);
         }
         
         if (isset($_POST["add_chapter"])) {
@@ -26,9 +41,12 @@ class BookController extends PageController {
         if (isset($_GET["book_uri"])) {
             $this->selectedBookUri = $_GET["book_uri"];
         }
+        
     }
     
-    function updateBookChapter() {
+    function updateBookChapter($new_text) {
+        $mapper = new \gb\mapper\ChapterMapper();
+        $mapper->updateChapterText($new_text, $this->selectedBookUri, $this->selectedChapterNumber);
         print "Please provide some piece of code to update the book chapter here!";
     }
     function addBookChapter() {
@@ -38,14 +56,23 @@ class BookController extends PageController {
     function getSelectedBookUri() {
         return $this->selectedBookUri;
     }
-    
+        
     function searchBookByGenre($genre){
         $mapper = new \gb\mapper\BookMapper();
         return $mapper->getBookByGenre($genre);
     }
-
-    function getSearchResult() {
+    
+    function searchByGenre($genre){
+        $mapper = new \gb\mapper\ChapterMapper();
+        return $mapper->getBookAndNumberOfChaptersByGenre($genre);
+    }
+    
+    function getSelectedBooks(){
         return $this->selectedBookUri;
+    }
+        
+    function getChapterText(){
+        return $this->chapterText;
     }
 }
 

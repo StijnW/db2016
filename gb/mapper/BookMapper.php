@@ -30,9 +30,9 @@ class BookMapper extends Mapper {
         $obj = null;        
         if (count($array) > 0) {
             $obj = new \gb\domain\Book( $array['name'] );
-            $obj->setBookName($array["name"]);
+            $obj->setBookName($array['name']);
             $obj->setDescription($array['description']);
-            $obj->setNumberAwards($array["COUNT(*)"]);
+            $obj->setNumberAwards($array['COUNT(*)']);
         } 
         
         return $obj;
@@ -74,6 +74,21 @@ class BookMapper extends Mapper {
         $books = $con->executeSelectStatement($selectStmt, array()); 
         return $this->getCollection($books);
     }
+
+	
+//	function getBookAndNumberOfChaptersByGenre($genre){
+//		$con = $this->getConnectionManager();
+//		$selectStmt = "SELECT b.name, COUNT(*)
+//						FROM book b, has_genre d, genre e, chapter c
+//						WHERE b.uri = d.book_uri
+//							and d.genre_uri = e.uri
+//							and e.uri = '$genre'
+//							and b.uri = c.book_uri
+//						GROUP BY b.name";
+//		$books = $con->executeSelectStatement($selectStmt, array()); 
+//        return $this->getCollection($books);
+//	}
+	
 	
 	// "SELECT b.name, b.description, a.name
                         // FROM (award a JOIN wins_award w ON a.uri = w.book_uri)

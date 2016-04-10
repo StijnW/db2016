@@ -11,6 +11,7 @@ class Book extends DomainObject {
     private $originalLanguage;
     private $firstPublicationDate;
     private $numberAwards;
+    private $numberOfChapters;
    
     function __construct( $id=null ) {
         //$this->name = $name;
@@ -62,6 +63,14 @@ class Book extends DomainObject {
 
     function getNumberAwards(){
         return $this->numberAwards;
+    }
+    
+    function setNumberOfChapters($number_of_chapters){
+        $this->numberOfChapters = $number_of_chapters;
+    }
+    
+    function getNumberOfChapters(){
+        return $this->numberOfChapters;
     }
 }
 
