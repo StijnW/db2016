@@ -1,18 +1,19 @@
 <?php
 	
-$title = "Update chapters of books";
+$title = "Find books you like";
 
 require("template/top.tpl.php");
-require_once("gb/controller/ChapterController.php");
+require_once("gb/controller/SimilarBooksController.php");
 require_once("gb/domain/Book.php");
 require_once("gb/mapper/GenreMapper.php");
 
-$chapterController = new gb\controller\ChapterController();
-$chapterController->process();
+
+$similarBooksController = new gb\controller\SimilarBooksController();
+$similarBooksController->process();
 
 $genreMapper = new gb\mapper\GenreMapper();
 $allGenres = $genreMapper->findAll();
-
+ 
 ?>    
 <form method="post">
 <table style="width: 100%">
@@ -21,6 +22,7 @@ $allGenres = $genreMapper->findAll();
     <td colspan="4">
     <table style="width: 100%">        
         <tr>
+			<h4>Please select the second book you like</h4>
             <td>Genre</td>            
             <td colspan="3" style="width: 85%">
                 <select style="width: 50%" name="genre">
@@ -29,6 +31,7 @@ $allGenres = $genreMapper->findAll();
                     foreach($allGenres as $genre) {
                         echo "<option value=\"", $genre->getUri(), "\">", $genre->getGenreName(), "</option>" ;
                     }
+                    
                     ?>
                 </select>
             </td>          
@@ -46,41 +49,35 @@ $allGenres = $genreMapper->findAll();
 </form>
 
 <?php
-	$books_and_nb_chapters = $chapterController->getSelectedBooks();
-	print count($books_and_nb_chapters) . " books found";
-	if (count($books_and_nb_chapters) > 0)
+	$books = $similarBooksController->getSelectedBookUri();
+	print count($books) . " books found";
+	if (count($books) > 0)
 	{?>	
-	<table style="width: 100%">
-		<tr>
-			<td>Book name</td>
-			<td>Chapters</td>
-			<td>Add chapters</td>       
-		</tr>
-		<?php
-			foreach($books_and_nb_chapters as $book_and_nb_chapters){
-				?>
-				<tr>
-				<td><?php
-				$link = "update_book_chapters.php?book_uri=".$book_and_nb_chapters->getUri();
-				$book_name = $book_and_nb_chapters->getBookName();
-				echo "<a href=$link>$book_name</a>";?></td>
-				<td><?php
-				$link = "update_book_chapters.php?book_uri=".$book_and_nb_chapters->getUri();
-				$number_of_chapters = $book_and_nb_chapters->getNumberOfChapters();
-				echo "<a href=$link>$number_of_chapters</a>";?></td>
-				<td><?php
-				$link = "add_book_chapters.php?book_uri=".$book_and_nb_chapters->getUri();
-				echo "<a href=$link>Add chapter</a>";?></td>
-				</tr>
-		<?php
-				}
-		?>
-	
+		<table style="width: 100%">
+    <tr>
+        <td>Book name</td>        
+        <td>Description</td>
+    </tr>   
+<?php
+		foreach($books as $book){
+			?>
+			<tr>
+            <td><?php
+				print $book->getUri();
+				$link = "find_similar_books_select_2.php?book_uri=".$book->getUri();
+				$book_name = $book->getBookName();
+				echo "<a href=$link>$book_name</a>";?></td>    
+			<td><?php echo $book->getDescription(); ?></td>
+			</tr>
+<?php
+		}
+?>
 </table>
 <?php
 	}
 ?>
-
+	
+	
 <?php
 	require("template/bottom.tpl.php");
 ?>
