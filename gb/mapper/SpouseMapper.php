@@ -28,7 +28,7 @@ class SpouseMapper extends Mapper {
         
         $obj = null;        
         if (count($array) > 0) {
-            $obj = new \gb\domain\Spouse( $array['full_name'] );
+            $obj = new \gb\domain\Spouse( $array['full_name_writer'] );
 
             $obj->setFullName($array['full_name_writer']);
 			$obj->setSpouse($array['full_name_spouse']);
@@ -61,12 +61,12 @@ class SpouseMapper extends Mapper {
     
     function getWritersWithWritingSpouse(){
         $con = $this->getConnectionManager();
-        $selectStmt = "Select p1.full_name_writer, p2.full_name as full_name_spouse, w1.active_from_year, w2.active_to_year
+        $selectStmt = "Select p1.full_name as full_name_writer, p2.full_name as full_name_spouse, w1.active_from_year, w1.active_to_year
                         FROM person p1, person p2, writer w1, writer w2, is_spouse_of i
                         WHERE p1.uri = w1.writer_uri
                             and p2.uri = w2.writer_uri
                             and i.writer_uri = w1.writer_uri
-                            and i.person_uri = w2.writer_uri ";
+                            and i.person_uri = w2.writer_uri";
 
         $spouse = $con->executeSelectStatement($selectStmt, array());
         return $this->getCollection($spouse);

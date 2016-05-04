@@ -43,7 +43,10 @@ class BookController extends PageController {
         }
         
         if (isset($_POST["add_chapter"])) {
-            $this->addBookChapter();
+			$array = explode('=',$_SERVER['REQUEST_URI']);
+            $this->selectedBookUri = $array[1];
+			$this->selectedChapterNumber = $_POST["chapter_number"];
+            $this->addBookChapter($_POST["new_text"], $this->selectedBookUri, $this->selectedChapterNumber);
         }
         
         if (isset($_GET["book_uri"])) {
@@ -56,8 +59,10 @@ class BookController extends PageController {
         $mapper = new \gb\mapper\ChapterMapper();
         $mapper->updateChapterText($new_text, $this->selectedBookUri, $this->selectedChapterNumber);
     }
-    function addBookChapter() {
-        print "Please provide some piece of code to add a new chapter for the selected books here!";
+	
+    function addBookChapter($new_text, $book_uri, $chapter_number) {
+        $mapper = new \gb\mapper\ChapterMapper();
+		$mapper->insertChapter($new_text, $book_uri, $chapter_number);
     }
     
     function getSelectedBookUri() {
