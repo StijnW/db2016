@@ -1,5 +1,8 @@
 <?php
+	
+$title = "Find books you like";
 
+require("template/top.tpl.php");
 require_once("gb/controller/SimilarBooksController.php");
 require_once("gb/domain/Book.php");
 require_once("gb/mapper/GenreMapper.php");
@@ -8,11 +11,10 @@ require_once("gb/mapper/GenreMapper.php");
 $similarBooksController = new gb\controller\SimilarBooksController();
 $similarBooksController->process();
 
-require("template/top.tpl.php");
-
 $genreMapper = new gb\mapper\GenreMapper();
 $allGenres = $genreMapper->findAll();
  
+ $secondBook = explode('=',$_SERVER['REQUEST_URI'])[1];
 ?>    
 <form method="post">
 <table style="width: 100%">
@@ -25,7 +27,7 @@ $allGenres = $genreMapper->findAll();
             <td>Genre</td>            
             <td colspan="3" style="width: 85%">
                 <select style="width: 50%" name="genre">
-                    <option value="">--------Book genres ---------- </option>
+                    <option value="">--------Book genres ----------</option>
 					<?php
                     foreach($allGenres as $genre) {
                         echo "<option value=\"", $genre->getUri(), "\">", $genre->getGenreName(), "</option>" ;
@@ -33,52 +35,38 @@ $allGenres = $genreMapper->findAll();
                     
                     ?>
                 </select>
-            </td>          
+            </td>
+			<td><input type ="submit" name="selectGenre" value="Select Genre"></td>
         </tr>
-        <tr>
-            <td >&nbsp;</td>
-            <td >&nbsp;</td>
-            <td><input type ="submit" name="search" value="Search" ></td>
-            <td >&nbsp;</td>
-    
+		<tr>
+            <td>Book</td>
+            <td colspan="3" style="width: 85%">
+                <select style="width: 50%" name="book">
+                    <option value="">--------Books----------</option>
+					<?php
+					$books = $similarBooksController->getSelectedBookByGenre();
+                    foreach($books as $book) {
+                        echo "<option value=\"", $book->getUri(), "\">", $book->getBookName(), "</option>" ;
+                    }
+                    
+                    ?>
+                </select>
+            </td>
+			<td><input type ="submit" name="selectBook" value="Select Book"></td>
         </tr>
+		<tr>
+			<td><?php $selectedBooks = $similarBooksController->getSelectedBookUris();
+			foreach($selectedBooks as $selectedBook){
+				echo $selectedBook;
+			} ?></td>
+		</tr>
+		<td><?php $link = "find_similar_books_select_3.php?bookuri1=".$secondBook."?bookuri2=".$similarBooksController->getFirstSelectedBookUri() ?></td>
+		<tr><?php echo "<a href=$link>Select third book</a>";?></tr>
     </table>
     </td>
 </table>
 </form>
-
-<?php
-	$books = $similarBooksController->getSelectedBookUri();
-	print count($books) . " books found";
-	if (count($books) > 0)
-	{?>	
-		<table style="width: 100%">
-    <tr>
-        <td>Book name</td>        
-        <td>Description</td>
-    </tr>   
-<?php
-		print $similarBooksController->getFirstSelectedBookUri();
-		$books = $similarBooksController->getSelectedBookUri();
-		foreach($books as $book){
-			?>
-			<tr>
-            <td><?php
-				print $book->getUri();
-				$first_book_uri=explode('=',$_SERVER['REQUEST_URI']);
-				$link = "find_similar_books_select_3.php?book_uri1=".$first_book_uri[1]."?book_uri2=".$book->getUri();
-				$book_name = $book->getBookName();
-				echo "<a href=$link>$book_name</a>";?></td>    
-			<td><?php echo $book->getDescription(); ?></td>
-			</tr>
-<?php
-		}
-?>
 </table>
-<?php
-	}
-?>
-	
 	
 <?php
 	require("template/bottom.tpl.php");

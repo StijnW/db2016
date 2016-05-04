@@ -21,7 +21,7 @@ class Book extends DomainObject {
     function setUri($uri) {
         $this->uri = $uri;
     }
-    function getUri(  ) {
+    function getUri() {
         return $this->uri;
     }
        
