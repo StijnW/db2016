@@ -29,7 +29,6 @@ $allGenres = $genreMapper->findAll();
                     foreach($allGenres as $genre) {
                         echo "<option value=\"", $genre->getUri(), "\">", $genre->getGenreName(), "</option>" ;
                     }
-                    
                     ?>
                 </select>
             </td>          
