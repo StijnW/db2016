@@ -1,0 +1,51 @@
+SELECT boekpersoongenreaward.uri, boekpersoongenreaward.full_name, boekpersoongenreaward.book_uri, boekpersoongenreaward.name, boekpersoongenreaward.genre_uri, boekpersoongenreaward.award_uri
+FROM
+	(
+        SELECT boekpersoongenre.uri, boekpersoongenre.full_name, boekpersoongenre.book_uri, boekpersoongenre.name, boekpersoongenre.genre_uri,  prijs.award_uri
+        FROM
+        (
+            SELECT boekenenpersonen.uri, boekenenpersonen.full_name, boekenenpersonen.book_uri, boekenenpersonen.name, has_genre.genre_uri
+            FROM
+            (
+                SELECT personenmetboeken.uri, personenmetboeken.full_name, personenmetboeken.book_uri, boek.name
+                FROM
+                (
+                    SELECT mensen.uri, mensen.full_name, writes.book_uri 
+                    FROM 
+                    (
+                        writes 	
+                        LEFT Join 
+                        (	
+                            (
+                                SELECT person.uri, person.full_name FROM person
+                            ) 
+                            mensen
+                            JOIN 
+                            (
+                                SELECT writer.writer_uri FROM writer
+                            ) 
+                            schrijvers
+                            ON mensen.uri=schrijvers.writer_uri
+                        )
+                        ON writes.writer_uri=mensen.uri
+                    )
+                )
+                personenmetboeken JOIN   
+                (
+                    SELECT book.name, book.uri FROM book
+                )
+                boek ON personenmetboeken.book_uri=boek.uri
+            )
+            boekenenpersonen 
+            Left JOIN has_genre 
+            ON has_genre.book_uri=boekenenpersonen.book_uri	
+        )
+        boekpersoongenre 
+        LEFT JOIN
+        (
+            SELECT wins_award.book_uri, wins_award.award_uri FROM wins_award
+        )
+        prijs
+        ON boekpersoongenre.book_uri=prijs.book_uri
+    )
+    boekpersoongenreaward

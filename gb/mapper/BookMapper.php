@@ -32,7 +32,7 @@ class BookMapper extends Mapper {
             $obj = new \gb\domain\Book( $array['name'] );
             $obj->setBookName($array['name']);
             $obj->setDescription($array['description']);
-            $obj->setNumberAwards($array['COUNT(*)']);
+            // $obj->setNumberAwards($array['COUNT(*)']);
         } 
         
         return $obj;
@@ -60,7 +60,14 @@ class BookMapper extends Mapper {
     
     function getBookByGenre($genre){
         $con = $this->getConnectionManager();
-        $selectStmt = "SELECT b.name,  COUNT(*), b.description
+        $selectStmt = "SELECT a.full_name AS name, writes.writer_uri AS description
+						FROM (writes LEFT Join 
+								((SELECT person.uri, person.full_name FROM person) a
+								 JOIN (SELECT w.writer_uri FROM writer w) b 
+								ON a.uri=b.writer_uri) ON writes.writer_uri=a.uri)";
+		
+		/*
+		"SELECT b.name,  COUNT(*), b.description
 		    			 FROM award a, book b, wins_award c, has_genre d, genre e
 						 WHERE c.book_uri = b.uri
 							 and c.award_uri = a.uri
@@ -68,9 +75,8 @@ class BookMapper extends Mapper {
 							 and d.genre_uri = e.uri
 							 and e.uri = '$genre'
                         GROUP BY b.name";
+		*/
 		
-		//Query werkte perfect in localhost...
-
         $books = $con->executeSelectStatement($selectStmt, array()); 
         return $this->getCollection($books);
     }
