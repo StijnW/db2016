@@ -33,6 +33,7 @@ class BookMapper extends Mapper {
             $obj->setBookName($array['name']);
             $obj->setDescription($array['description']);
             $obj->setNumberAwards($array['COUNT(*)']);
+			$obj->setUri($array['uri']);
         } 
         
         return $obj;
@@ -60,7 +61,7 @@ class BookMapper extends Mapper {
     
     function getBookByGenre($genre){
         $con = $this->getConnectionManager();
-        $selectStmt = "SELECT b.name,  COUNT(*), b.description
+        $selectStmt = "SELECT b.name, b.uri,  COUNT(*), b.description
 		    			 FROM award a, book b, wins_award c, has_genre d, genre e
 						 WHERE c.book_uri = b.uri
 							 and c.award_uri = a.uri
@@ -69,34 +70,10 @@ class BookMapper extends Mapper {
 							 and e.uri = '$genre'
                         GROUP BY b.name";
 		
-		//Query werkte perfect in localhost...
-
         $books = $con->executeSelectStatement($selectStmt, array()); 
         return $this->getCollection($books);
     }
-
 	
-//	function getBookAndNumberOfChaptersByGenre($genre){
-//		$con = $this->getConnectionManager();
-//		$selectStmt = "SELECT b.name, COUNT(*)
-//						FROM book b, has_genre d, genre e, chapter c
-//						WHERE b.uri = d.book_uri
-//							and d.genre_uri = e.uri
-//							and e.uri = '$genre'
-//							and b.uri = c.book_uri
-//						GROUP BY b.name";
-//		$books = $con->executeSelectStatement($selectStmt, array()); 
-//        return $this->getCollection($books);
-//	}
-	
-	
-	// "SELECT b.name, b.description, a.name
-                        // FROM (award a JOIN wins_award w ON a.uri = w.book_uri)
-                             // LEFT OUTER JOIN
-                             // (book b JOIN has_genre h ON b.uri = h.book_uri)
-                             // ON w.genre_uri = h.genre_uri
-                        // WHERE h.genre_uri = '$genre'";
-						
 }
 
 
