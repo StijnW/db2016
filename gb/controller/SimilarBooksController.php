@@ -9,6 +9,7 @@ class SimilarBooksController extends PageController {
     
     private $selectedBookByGenre;
     private $selectedBooks = array();
+	private $similarBooks;
         
     function process() {
                         
@@ -21,6 +22,7 @@ class SimilarBooksController extends PageController {
         else if (isset($_POST["selectBook"])) {
             if (strlen($_POST["book"]) > 0) {
                 array_push($this->selectedBooks,$_POST["book"]);
+				$this->similarBooks = $this->searchSimilarBooks($_POST["book"]);
             }
         }
     }
@@ -43,6 +45,15 @@ class SimilarBooksController extends PageController {
             return $this->selectedBooks[0];
         }
     }
+	
+	function searchSimilarBooks($book) {
+		$mapper = new \gb\mapper\SimilarBooksMapper();
+		return $mapper->getSimilarBooks($book);
+	}
+	
+	function getSimilarBooks() {
+		return $this->similarBooks;
+	}
 }
 
 ?>
