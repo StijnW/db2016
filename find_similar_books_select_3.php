@@ -75,20 +75,23 @@ $firstBook = explode('?',$array)[0];
 <h4><?php if (strlen($selectedBook) > 0) { echo "Results"; }?></h4>
 <?php
 	if (strlen($selectedBook) > 0){
-	$foundBooks = $similarBooksController->searchSimilarBooks($firstBook, $secondBook, $selectedBook);
+	$firstFoundBooks = $similarBooksController->searchSimilarBooks($firstBook, $secondBook, $selectedBook);
+	$secondFoundBooks = $similarBooksController->searchSimilarBooks($secondBook, $secondBook, $selectedBook);
+	$thirdFoundBooks = $similarBooksController->searchSimilarBooks($secondBook, $secondBook, $selectedBook);
+	$foundBooks = array_merge($firstFoundBooks,$secondFoundBooks,$thirdFoundBooks);
 	if (count($foundBooks) > 0)
 		{?>	
 		<table style="width: 100%">
     <tr>
-        <td>Book name</td>
-        <td>Writer</td>
+        <td><span style= "font-weight:bold">Book name</span></td>
+        <td><span style= "font-weight:bold">Writer</span></td>
     </tr>   
 <?php
 		foreach($foundBooks as $foundBook){
 			?>
 			<tr>
 			<td><?php echo $foundBook->getBookName(); ?></td>
-			<!--<td><?php echo $foundBook->getWriter(); ?></td>-->
+			<td><?php echo $foundBook->getWriter(); ?></td>
 			</tr>
 <?php
 		}

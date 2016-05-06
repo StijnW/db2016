@@ -54,7 +54,6 @@ $firstBook = explode('=',$_SERVER['REQUEST_URI'])[1];
 				<input type ="submit" name="selectBook" value="Select Book">
             </td>
         </tr>
-		<tr>
 			<td><span style="font-weight:bold">Current Books: </span><?php $selectedBook = $similarBooksController->getSelectedBookUri(); ?></td>
 		</tr>
 		<tr><td allign = "center"><?php $firstBookName = $similarBooksController->getBookNameByUri($firstBook);

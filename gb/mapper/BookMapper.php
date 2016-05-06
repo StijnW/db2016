@@ -33,6 +33,9 @@ class BookMapper extends Mapper {
 			if (array_key_exists('uri', $array)){
 				$obj->setUri($array["uri"]);}
             $obj->setBookName($array["name"]);
+			if (array_key_exists('full_name', $array)){
+				$obj->setWriter($array["full_name"]);
+			}
 			if (array_key_exists('description', $array)){
 				$obj->setDescription($array['description']);
 			}
@@ -87,12 +90,96 @@ class BookMapper extends Mapper {
 		return $this->getCollection($book);
 	}
 	
-	function getSimilarBooks($firstBook,$secondBook,$thirdBook){
+	function getSimilarBooks($firstBook, $secondBook, $selectedBook){
 		$con = $this->getConnectionManager();
-		$selectStmt = "SELECT b.name
-						FROM book b
-						WHERE b.uri = '$firstBook' or
-						b.uri = '$secondBook' or b.uri = '$thirdBook' ";
+		$selectStmt = "SELECT monsterlijst.name, monsterlijst.full_name, COUNT(*)
+						FROM
+						(
+						SELECT stijlschrijver.book_uri, stijlschrijver.writer_uri, stijlschrijver.genre_uri, prijs.award_uri
+						FROM
+						(
+						SELECT schrijver.book_uri, schrijver.writer_uri, stijl.genre_uri FROM
+						(
+							SELECT writes.writer_uri, writes.book_uri
+							FROM writes
+							WHERE writes.book_uri = '$firstBook'
+						) schrijver
+						LEFT JOIN
+						 (
+							SELECT has_genre.genre_uri, has_genre.book_uri
+							FROM has_genre
+							WHERE has_genre.book_uri = '$firstBook'
+						)  
+						stijl
+						ON schrijver.book_uri = stijl.book_uri
+						) stijlschrijver
+						LEFT JOIN
+						(
+							SELECT wins_award.award_uri, wins_award.book_uri
+							FROM wins_award
+							WHERE wins_award.book_uri = '$firstBook'
+						) 
+						prijs
+						ON prijs.book_uri=stijlschrijver.book_uri
+						) gegevenboek
+						,
+						(
+						SELECT boekpersoongenreaward.uri, boekpersoongenreaward.full_name, boekpersoongenreaward.book_uri, boekpersoongenreaward.name, boekpersoongenreaward.genre_uri, boekpersoongenreaward.award_uri
+						FROM
+						(
+							SELECT boekpersoongenre.uri, boekpersoongenre.full_name, boekpersoongenre.book_uri, boekpersoongenre.name, boekpersoongenre.genre_uri,  prijs.award_uri
+							FROM
+							(
+								SELECT boekenenpersonen.uri, boekenenpersonen.full_name, boekenenpersonen.book_uri, boekenenpersonen.name, has_genre.genre_uri
+								FROM
+								(
+									SELECT personenmetboeken.uri, personenmetboeken.full_name, personenmetboeken.book_uri, boek.name
+									FROM
+									(
+										SELECT mensen.uri, mensen.full_name, writes.book_uri 
+										FROM 
+										(
+											writes 	
+											Left Join 
+											(	
+												(
+												 SELECT person.uri, person.full_name FROM person
+												) 
+												mensen
+												JOIN 
+												(
+													SELECT writer.writer_uri FROM writer
+												) 
+												schrijvers
+												ON mensen.uri=schrijvers.writer_uri
+											)
+											ON writes.writer_uri=mensen.uri
+										)
+									)
+									personenmetboeken JOIN   
+									(
+									SELECT book.name, book.uri FROM book
+									)
+									boek ON personenmetboeken.book_uri=boek.uri
+								)
+								boekenenpersonen 
+								Left JOIN has_genre 
+								ON has_genre.book_uri=boekenenpersonen.book_uri	
+							)
+							boekpersoongenre 
+							LEFT JOIN
+							(
+								SELECT wins_award.book_uri, wins_award.award_uri FROM wins_award
+							)
+							prijs
+							ON boekpersoongenre.book_uri=prijs.book_uri
+						)
+						boekpersoongenreaward
+						)    monsterlijst
+						WHERE
+						monsterlijst.uri = gegevenboek.writer_uri OR monsterlijst.genre_uri=gegevenboek.genre_uri OR monsterlijst.award_uri=gegevenboek.award_uri
+						GROUP BY monsterlijst.uri
+						ORDER BY COUNT(*) DESC";
 		$book = $con->executeSelectStatement($selectStmt, array());
 		return $this->getCollection($book);
 	}
