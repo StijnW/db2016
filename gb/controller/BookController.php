@@ -73,11 +73,6 @@ class BookController extends PageController {
         return $mapper->getBookAndNumberOfChaptersByGenre($genre);
     }
     
-    function searchSimilarBooks($firstBook, $secondBook, $thirdBook){
-        $mapper = new \gb\mapper\ChapterMapper();
-        return $mapper->getSimilarBooks($firstBook,$secondBook,$thirdBook);
-    }
-    
     function getSelectedBooks(){
         return $this->selectedBookUri;
     }
