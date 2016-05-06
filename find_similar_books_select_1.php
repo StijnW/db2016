@@ -26,7 +26,7 @@ $allGenres = $genreMapper->findAll();
             <td>Genre</td>            
             <td colspan="3" style="width: 85%">
                 <select style="width: 25%" name="genre">
-                    <option value="">-------------- Book genres --------------</option>
+                    <option value="">---------------- Book genres ----------------</option>
 					<?php
                     foreach($allGenres as $genre) {
                         echo "<option value=\"", $genre->getUri(), "\">", $genre->getGenreName(), "</option>" ;
@@ -41,7 +41,7 @@ $allGenres = $genreMapper->findAll();
             <td>Book</td>
             <td colspan="3" style="width: 85%">
                 <select style="width: 25%" name="book">
-                    <option value="">----------------- Books -----------------</option>
+                    <option value="">------------------ Books --------------------</option>
 					<?php
 					$books = $similarBooksController->getSelectedBookByGenre();
                     foreach($books as $book) {
@@ -52,8 +52,10 @@ $allGenres = $genreMapper->findAll();
                 </select><input type ="submit" name="selectBook" value="Select Book">
             </td>
         </tr>
-		<td>Current Books: <?php $selectedBook = $similarBooksController->getSelectedBookUri();
-		echo $selectedBook;?></td>
+			<td><span style="font-weight:bold">Current Books: </span><?php $selectedBook = $similarBooksController->getSelectedBookUri(); ?></td>
+		<tr><td><?php $bookName = $similarBooksController->getBookNameByUri($selectedBook);
+		if (count($bookName) > 0){
+					  echo "1. ".$bookName[0]->getBookName(); }?></td></tr>
 		<td><?php $link = "find_similar_books_select_2.php?bookuri1=".$similarBooksController->getSelectedBookUri() ?></td>
 		<td align="right"><?php echo "<a href=$link>Select second book</a>";?></td>
     </table>

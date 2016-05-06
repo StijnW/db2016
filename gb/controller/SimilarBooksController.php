@@ -9,6 +9,7 @@ class SimilarBooksController extends PageController {
     
     private $selectedBookByGenre;
     private $selectedBook;
+    private $firstBookName;
         
     function process() {
                         
@@ -36,6 +37,16 @@ class SimilarBooksController extends PageController {
     
     function getSelectedBookUri() {
         return $this->selectedBook;
+    }
+    
+    function searchSimilarBooks($firstBook, $secondBook, $thirdBook){
+        $mapper = new \gb\mapper\BookMapper();
+        return $mapper->getSimilarBooks($firstBook,$secondBook,$thirdBook);
+    }
+    
+    function getBookNameByUri($uri){
+        $mapper = new \gb\mapper\BookMapper();
+        return $mapper->getBookNameByUri($uri);
     }
 }
 

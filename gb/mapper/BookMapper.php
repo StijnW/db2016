@@ -30,9 +30,15 @@ class BookMapper extends Mapper {
         $obj = null;        
         if (count($array) > 0) {
             $obj = new \gb\domain\Book( $array['name'] );
+			if (array_key_exists('uri', $array)){
+				$obj->setUri($array["uri"]);}
             $obj->setBookName($array["name"]);
-            $obj->setDescription($array['description']);
-            $obj->setNumberAwards($array["COUNT(*)"]);
+			if (array_key_exists('description', $array)){
+				$obj->setDescription($array['description']);
+			}
+			if (array_key_exists('COUNT(*)', $array)){
+				$obj->setNumberAwards($array["COUNT(*)"]);
+			}
         } 
         
         return $obj;
@@ -60,7 +66,7 @@ class BookMapper extends Mapper {
     
     function getBookByGenre($genre){
         $con = $this->getConnectionManager();
-        $selectStmt = "SELECT b.name,  COUNT(*), b.description
+        $selectStmt = "SELECT b.name, b.uri,  COUNT(*), b.description
 		    			 FROM award a, book b, wins_award c, has_genre d, genre e
 						 WHERE c.book_uri = b.uri
 							 and c.award_uri = a.uri
@@ -68,20 +74,28 @@ class BookMapper extends Mapper {
 							 and d.genre_uri = e.uri
 							 and e.uri = '$genre'
                         GROUP BY b.name";
-		
-		//Query werkte perfect in localhost...
-
         $books = $con->executeSelectStatement($selectStmt, array()); 
         return $this->getCollection($books);
     }
 	
-	// "SELECT b.name, b.description, a.name
-                        // FROM (award a JOIN wins_award w ON a.uri = w.book_uri)
-                             // LEFT OUTER JOIN
-                             // (book b JOIN has_genre h ON b.uri = h.book_uri)
-                             // ON w.genre_uri = h.genre_uri
-                        // WHERE h.genre_uri = '$genre'";
-						
+	function getBookNameByUri($uri){
+		$con = $this->getConnectionManager();
+		$selectStmt = "SELECT b.name
+						FROM book b
+						WHERE b.uri = '$uri'";
+		$book = $con->executeSelectStatement($selectStmt, array());
+		return $this->getCollection($book);
+	}
+	
+	function getSimilarBooks($firstBook,$secondBook,$thirdBook){
+		$con = $this->getConnectionManager();
+		$selectStmt = "SELECT b.name
+						FROM book b
+						WHERE b.uri = '$firstBook' or
+						b.uri = '$secondBook' or b.uri = '$thirdBook' ";
+		$book = $con->executeSelectStatement($selectStmt, array());
+		return $this->getCollection($book);
+	}
 }
 
 

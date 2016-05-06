@@ -49,7 +49,6 @@ class BookController extends PageController {
         if (isset($_GET["book_uri"])) {
             $this->selectedBookUri = $_GET["book_uri"];
         }
-        
     }
     
     function updateBookChapter($new_text) {
@@ -74,7 +73,12 @@ class BookController extends PageController {
         return $mapper->getBookAndNumberOfChaptersByGenre($genre);
     }
     
-    function getSelectedBook(){
+    function searchSimilarBooks($firstBook, $secondBook, $thirdBook){
+        $mapper = new \gb\mapper\ChapterMapper();
+        return $mapper->getSimilarBooks($firstBook,$secondBook,$thirdBook);
+    }
+    
+    function getSelectedBooks(){
         return $this->selectedBookUri;
     }
         
