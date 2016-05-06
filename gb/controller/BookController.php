@@ -74,7 +74,7 @@ class BookController extends PageController {
         return $mapper->getBookAndNumberOfChaptersByGenre($genre);
     }
     
-    function getSelectedBooks(){
+    function getSelectedBook(){
         return $this->selectedBookUri;
     }
         

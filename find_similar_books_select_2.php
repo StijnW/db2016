@@ -14,7 +14,7 @@ $similarBooksController->process();
 $genreMapper = new gb\mapper\GenreMapper();
 $allGenres = $genreMapper->findAll();
  
- $secondBook = explode('=',$_SERVER['REQUEST_URI'])[1];
+$firstBook = explode('=',$_SERVER['REQUEST_URI'])[1];
 ?>    
 <form method="post">
 <table style="width: 100%">
@@ -55,10 +55,9 @@ $allGenres = $genreMapper->findAll();
 			<td><input type ="submit" name="selectBook" value="Select Book"></td>
         </tr>
 		<tr>
-			<td><?php $selectedBooks = $similarBooksController->getSelectedBookUris();
-			foreach($selectedBooks as $selectedBook){
-				echo $selectedBook;
-			} ?></td>
+			<td>Current Books: <?php $selectedBook = $similarBooksController->getSelectedBookUri();
+			echo $firstBook;
+			echo $selectedBook?></td>
 		</tr>
 		<td><?php $link = "find_similar_books_select_3.php?bookuri1=".$secondBook."?bookuri2=".$similarBooksController->getFirstSelectedBookUri() ?></td>
 		<tr><?php echo "<a href=$link>Select third book</a>";?></tr>
