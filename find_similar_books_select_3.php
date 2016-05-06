@@ -14,7 +14,9 @@ $similarBooksController->process();
 $genreMapper = new gb\mapper\GenreMapper();
 $allGenres = $genreMapper->findAll();
  
- $secondBook = explode('2=',$_SERVER['REQUEST_URI'])[1];
+$secondBook = explode('2=',$_SERVER['REQUEST_URI'])[1];
+$array = explode('?bookuri1=',$_SERVER['REQUEST_URI'])[1];
+$firstBook = explode('?',$array)[0];
 ?>    
 <form method="post">
 <table style="width: 100%">
@@ -23,11 +25,11 @@ $allGenres = $genreMapper->findAll();
     <td colspan="4">
     <table style="width: 100%">        
         <tr>
-			<h4>Please select the second book you like</h4>
+			<h4>Please select the third book you like</h4>
             <td>Genre</td>            
             <td colspan="3" style="width: 85%">
-                <select style="width: 50%" name="genre">
-                    <option value="">--------Book genres ----------</option>
+                <select style="width: 25%" name="genre">
+                    <option value="">---------------- Book genres ----------------</option>
 					<?php
                     foreach($allGenres as $genre) {
                         echo "<option value=\"", $genre->getUri(), "\">", $genre->getGenreName(), "</option>" ;
@@ -35,14 +37,14 @@ $allGenres = $genreMapper->findAll();
                     
                     ?>
                 </select>
+				<input type ="submit" name="selectGenre" value="Select Genre">
             </td>
-			<td><input type ="submit" name="selectGenre" value="Select Genre"></td>
         </tr>
 		<tr>
             <td>Book</td>
             <td colspan="3" style="width: 85%">
-                <select style="width: 50%" name="book">
-                    <option value="">--------Books----------</option>
+                <select style="width: 25%" name="book">
+                    <option value="">------------------ Books --------------------</option>
 					<?php
 					$books = $similarBooksController->getSelectedBookByGenre();
                     foreach($books as $book) {
@@ -51,23 +53,53 @@ $allGenres = $genreMapper->findAll();
                     
                     ?>
                 </select>
+				<input type ="submit" name="selectBook" value="Select Book">
             </td>
-			<td><input type ="submit" name="selectBook" value="Select Book"></td>
         </tr>
 		<tr>
-			<td><?php $selectedBooks = $similarBooksController->getSelectedBookUris();
-			foreach($selectedBooks as $selectedBook){
-				echo $selectedBook;
-			} ?></td>
+			<td><span style="font-weight:bold">Current Books: </span><?php $selectedBook = $similarBooksController->getSelectedBookUri(); ?></td>
 		</tr>
-		<td><?php $link = "find_similar_books_select_3.php?bookuri1=".$secondBook."?bookuri2=".$similarBooksController->getFirstSelectedBookUri() ?></td>
-		<td><?php echo "<a href=$link>Select third book</a>";?></td>
+		<tr><td allign = "center"><?php $firstBookName = $similarBooksController->getBookNameByUri($firstBook);
+		if (count($firstBookName) > 0){
+					  echo "1. ".$firstBookName[0]->getBookName(); }?></td></tr>
+		<tr><td allighn "center"><?php $secondBookName = $similarBooksController->getBookNameByUri($secondBook);
+		if (count($secondBookName) > 0){
+					  echo "2. ".$secondBookName[0]->getBookName(); }?></td></tr>
+		<tr><td allighn "center"><?php $selectedBookName = $similarBooksController->getBookNameByUri($selectedBook);
+		if (count($selectedBookName) > 0){
+					  echo "3. ".$selectedBookName[0]->getBookName(); }?></td></tr>
     </table>
     </td>
 </table>
 </form>
+<h4><?php if (strlen($selectedBook) > 0) { echo "Results"; }?></h4>
+<?php
+	if (strlen($selectedBook) > 0){
+	$foundBooks = $similarBooksController->searchSimilarBooks($firstBook, $secondBook, $selectedBook);
+	if (count($foundBooks) > 0)
+		{?>	
+		<table style="width: 100%">
+    <tr>
+        <td>Book name</td>
+        <td>Writer</td>
+    </tr>   
+<?php
+		foreach($foundBooks as $foundBook){
+			?>
+			<tr>
+			<td><?php echo $foundBook->getBookName(); ?></td>
+			<!--<td><?php echo $foundBook->getWriter(); ?></td>-->
+			</tr>
+<?php
+		}
+?>
 </table>
-	
+
+<?php
+		}
+	}
+?>
+
 <?php
 	require("template/bottom.tpl.php");
 ?>

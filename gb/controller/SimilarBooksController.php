@@ -8,7 +8,8 @@ require_once("gb/mapper/ChapterMapper.php");
 class SimilarBooksController extends PageController {
     
     private $selectedBookByGenre;
-    private $selectedBooks = array();
+    private $selectedBook;
+    private $firstBookName;
         
     function process() {
                         
@@ -20,7 +21,7 @@ class SimilarBooksController extends PageController {
         
         else if (isset($_POST["selectBook"])) {
             if (strlen($_POST["book"]) > 0) {
-                array_push($this->selectedBooks,$_POST["book"]);
+                $this->selectedBook = $_POST["book"];
             }
         }
     }
@@ -34,14 +35,18 @@ class SimilarBooksController extends PageController {
         return $this->selectedBookByGenre;
     }
     
-    function getSelectedBookUris() {
-        return $this->selectedBooks;
+    function getSelectedBookUri() {
+        return $this->selectedBook;
     }
     
-    function getFirstSelectedBookUri(){
-        if (count($this->selectedBooks) > 0){
-            return $this->selectedBooks[0];
-        }
+    function searchSimilarBooks($firstBook, $secondBook, $thirdBook){
+        $mapper = new \gb\mapper\BookMapper();
+        return $mapper->getSimilarBooks($firstBook,$secondBook,$thirdBook);
+    }
+    
+    function getBookNameByUri($uri){
+        $mapper = new \gb\mapper\BookMapper();
+        return $mapper->getBookNameByUri($uri);
     }
 }
 
