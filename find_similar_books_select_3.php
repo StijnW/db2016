@@ -14,7 +14,8 @@ $similarBooksController->process();
 $genreMapper = new gb\mapper\GenreMapper();
 $allGenres = $genreMapper->findAll();
  
- $secondBook = explode('2=',$_SERVER['REQUEST_URI'])[1];
+ $secondBookLink = explode('2=',$_SERVER['REQUEST_URI'])[1];
+
 ?>    
 <form method="post">
 <table style="width: 100%">
@@ -27,7 +28,7 @@ $allGenres = $genreMapper->findAll();
             <td>Genre</td>            
             <td colspan="3" style="width: 85%">
                 <select style="width: 50%" name="genre">
-                    <option value="">--------Book genres ----------</option>
+                    <option value="">-------- Book genres ----------</option>
 					<?php
                     foreach($allGenres as $genre) {
                         echo "<option value=\"", $genre->getUri(), "\">", $genre->getGenreName(), "</option>" ;
