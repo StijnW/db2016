@@ -39,9 +39,14 @@ class SimilarBooksController extends PageController {
         return $this->selectedBook;
     }
     
-    function searchSimilarBooks($firstBook, $secondBook, $selectedBook){
+    function searchSimilarBooks($selectedBook){
         $mapper = new \gb\mapper\BookMapper();
-        return $mapper->getSimilarBooks($firstBook, $secondBook, $selectedBook);
+        return $mapper->getSimilarBooks($selectedBook);
+    }
+    
+    function searchSimilarBooksBasedOnThree($firstBook, $secondBook, $selectedBook){
+        $mapper = new \gb\mapper\BookMapper();
+        return $mapper->getSimilarBooksBasedOnThree($firstBook, $secondBook, $selectedBook);
     }
     
     function getBookNameByUri($uri){
