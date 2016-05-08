@@ -75,10 +75,13 @@ $firstBook = explode('?',$array)[0];
 <h4><?php if (strlen($selectedBook) > 0) { echo "Results"; }?></h4>
 <?php
 	if (strlen($selectedBook) > 0){
-	$firstFoundBooks = $similarBooksController->searchSimilarBooks($firstBook, $secondBook, $selectedBook);
-	$secondFoundBooks = $similarBooksController->searchSimilarBooks($secondBook, $secondBook, $selectedBook);
-	$thirdFoundBooks = $similarBooksController->searchSimilarBooks($secondBook, $secondBook, $selectedBook);
+	$firstFoundBooks = $similarBooksController->searchSimilarBooks($firstBook);
+	$secondFoundBooks = $similarBooksController->searchSimilarBooks($secondBook);
+	$thirdFoundBooks = $similarBooksController->searchSimilarBooks($selectedBook);
 	$foundBooks = array_merge($firstFoundBooks,$secondFoundBooks,$thirdFoundBooks);
+	//if you uncomment line 84 and comment lines 78-81, a search function based on the three given books will run
+	//this function is slow, we prefer to use the function based on 1 book and merge the results.
+	//$foundBooks = $similarBooksController->searchSimilarBooksBasedOnThree($firstBook,$secondBook,$selectedBook);
 	if (count($foundBooks) > 0)
 		{?>	
 		<table style="width: 100%">

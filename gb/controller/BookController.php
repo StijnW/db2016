@@ -9,12 +9,7 @@ class BookController extends PageController {
     private $selectedBookUri;
     private $selectedChapterNumber;
     private $chapterText;
-    
-    //function __construct($title){
-    //    $array = explode('=',$title);
-    //    $this->selectedBookUri = $array[1];
-    //}
-    
+        
     function process() {
         
         if (isset($_POST["search"])) {
@@ -33,7 +28,6 @@ class BookController extends PageController {
         
         else if (isset($_POST["chapter"])){
                 $array = explode(',',($_POST["chapter"]));
-                print_r($array);
                 $chapterText = $array[0];
                 $selectedChapterNumber = $array[1];
                 $selectedBookUri = $array[2];
